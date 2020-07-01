@@ -1,0 +1,127 @@
+delimiter $$
+
+
+
+create trigger customer_headCount_insert
+before insert on customer
+for each row
+begin
+	if(new.headCount <= 0)  then
+	signal sqlstate '45000'
+	set message_text = 'Head Count must be positive';
+	end if;
+end;
+$$
+
+create trigger customer_headCount_update
+before update on customer
+for each row
+begin
+	if(new.headCount <= 0)  then
+	signal sqlstate '45000'
+	set message_text = 'Head Count must be positive';
+	end if;
+end;
+$$
+
+
+
+create trigger employee_insert
+before insert on employee
+for each row
+begin
+	if(year(now()) - year(new.DOB) < 18
+		OR new.DOJ<new.DOB 
+		OR new.gender NOT IN ('male','female','other')) then
+	signal sqlstate '45000'
+	set message_text = 'Error with value entered.';
+	end if;
+end;
+$$
+
+create trigger employee_update
+before update on employee
+for each row
+begin
+	if(year(now()) - year(new.DOB) < 18
+		OR new.DOJ<new.DOB 
+		OR new.gender NOT IN ('male','female','other')) then
+	signal sqlstate '45000'
+	set message_text = 'Error with value entered.';
+	end if;
+end;
+$$
+
+
+
+create trigger item_quantity_insert
+before insert on itemsinorder
+for each row
+begin
+	if(new.qty <= 0)  then
+	signal sqlstate '45000'
+	set message_text = 'Quantity must be positive.';
+	end if;
+end;
+$$
+
+create trigger item_quantity_update
+before update on itemsinorder
+for each row
+begin
+	if(new.qty <= 0)  then
+	signal sqlstate '45000'
+	set message_text = 'Quantity must be positive.';
+	end if;
+end;
+$$
+
+
+
+create trigger menu_price_insert
+before insert on menu
+for each row
+begin
+	if(new.price <= 0)  then
+	signal sqlstate '45000'
+	set message_text = 'Price must be positive.';
+	end if;
+end;
+$$
+
+create trigger menu_price_update
+before update on menu
+for each row
+begin
+	if(new.price <= 0)  then
+	signal sqlstate '45000'
+	set message_text = 'Price must be positive.';
+	end if;
+end;
+$$
+
+
+
+create trigger table_capacity_insert
+before insert on `table`
+for each row
+begin
+	if(new.capacity <= 0)  then
+	signal sqlstate '45000'
+	set message_text = 'Capacity of a table cannot be non positive.';
+	end if;
+end;
+$$
+
+create trigger table_capacity_update
+before update on `table`
+for each row
+begin
+	if(new.capacity <= 0)  then
+	signal sqlstate '45000'
+	set message_text = 'Capacity of a table cannot be non positive.';
+	end if;
+end;
+$$
+
+delimiter ;
